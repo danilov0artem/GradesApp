@@ -1,5 +1,28 @@
 #include <iostream>
 
+int readInt(const std::string& prompt = "Enter an integer: ") {
+    while (true) {
+        std::cout << prompt;
+        std::string line;
+        if (!std::getline(std::cin, line)) {
+            std::cerr << "\nInput error or EOF encountered. Exiting.\n";
+            std::exit(EXIT_FAILURE);
+        }
+
+        try {
+            size_t pos;
+            int value = std::stoi(line, &pos);
+            if (pos != line.size()) {
+                // Extra characters after number
+                throw std::invalid_argument("Trailing characters");
+            }
+            return value;
+        } catch (...) {
+            std::cout << "Invalid input. Please enter a valid integer.\n";
+        }
+    }
+}
+
 enum class MenuItem {
     exit = 0,
     loadGrades = 1, 
