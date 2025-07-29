@@ -1,41 +1,46 @@
-#include <iostream>
-
-int readInt(int min, int max, const std::string& prompt = "Enter an integer: ") {
-    while (true) {
-        std::cout << prompt;
-        std::string line;
-        if (!std::getline(std::cin, line)) {
-            std::cerr << "\nInput error or EOF encountered. Exiting.\n";
-            std::exit(EXIT_FAILURE);
-        }
-
-        try {
-            size_t pos;
-            int value = std::stoi(line, &pos);
-            if (pos != line.size()) {
-                throw std::invalid_argument("Trailing characters");
-            }
-            if (value < min || value > max) {
-                std::cout << "Please enter a number between " << min << " and " << max << ".\n";
-                continue;
-            }
-            return value;
-        } catch (const std::exception&) {
-            std::cout << "Invalid input. Please enter a valid integer.\n";
-        }
-    }
-}
+#include "helpers.h"
 
 enum class MenuItem {
     exit = 0,
     loadGrades = 1, 
     saveGrades = 2, 
-    showGrade = 3,
+    showGrades = 3,
     GPA = 4,
     addGrade = 5,
     changeGrade = 6,
     deleteGrade = 7,
 };
+
+void loadGrades(std::vector<int>& grades) {
+    std::string filename = readLine("Enter file name: ");
+    std::ifstream file(filename);
+
+    if (!file) {
+        std::cerr << "Error: Could not open file \"" << filename << "\".\n";
+        return;
+    }
+
+    grades.clear();
+
+    std::string line;
+    int lineNumber = 0;
+
+    while (std::getline(file, line)) {
+        ++lineNumber;
+        try {
+            int grade = helpers::stringToInteger(line);
+            grades.push_back(grade);
+        } catch (const std::exception&) {
+            std::cerr << "Error on line " << lineNumber << ": \"" << line << "\"\n";
+        }
+    }
+
+    std::cout << "Loaded " << grades.size() << " grade(s) from \"" << filename << "\".\n";
+}
+
+void saveGrades(const std::vector<int>& grades) {
+    
+}
 
 void menu() {
     std::vector<int> grades;
@@ -50,12 +55,10 @@ void menu() {
         std::cout << "7. Delete grade\n"; 
         std::cout << "0. Exit\n";
 
-        std::cout << ">>> ";
-        std::string menuChoice;
-        getline(std::cin, menuChoice);
+        int menuChoice = readInt(0, 7, ">>> ");
         
         if (menuChoice == MenuItem::loadGrades) {
-            
+            loadGrades(grades);
         }
         else if (menuChoice == MenuItem::saveGrades) {
 
@@ -78,12 +81,9 @@ void menu() {
         else if (menuChoice == MenuItem::exit) {
             
         }
-        else {
-            std::cout << "Invalid input! Press any key to continue...\n";
-        }
     }
 }
 
 int main() {
-    
+    menu();
 }
