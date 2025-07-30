@@ -1048,3 +1048,5 @@ dkms.conf
 .vscode
 test
 test.cpp
+*.txt
+app

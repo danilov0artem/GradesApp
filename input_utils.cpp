@@ -1,6 +1,6 @@
-#include "helpers.h"
+#include "input_utils.h"
 
-namespace helpers {
+namespace console {
 
     void clearConsole() {
     #ifdef _WIN32

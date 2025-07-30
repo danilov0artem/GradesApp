@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace helpers {
+namespace console {
     void clearConsole();
     std::string readLine(const std::string& prompt = "");
     int stringToInteger(const std::string& str);
